@@ -8,9 +8,9 @@ export function useBoardSize() {
       const width = window.innerWidth;
 
       if (width < 640) {
-        setSize(300); // Mobile
+        setSize(370); // Mobile
       } else if (width < 1024) {
-        setSize(400); // Tablet
+        setSize(600); // Tablet
       } else {
         setSize(700); // Desktop
       }
