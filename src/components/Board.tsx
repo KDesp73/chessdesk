@@ -19,8 +19,8 @@ export default function Board({
 }: BoardProps) {
   const [game, setGame] = useState(new Chess());
   const [result, setResult] = useState<string | null>(null);
+  const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
 
-  // Function to check game result
   const updateResult = useCallback((g: Chess) => {
     if (g.isCheckmate()) {
       setResult(`Checkmate! ${g.turn() === "w" ? "Black" : "White"} wins.`);
@@ -37,7 +37,6 @@ export default function Board({
     }
   }, []);
 
-  // Sync game state with fen prop
   useEffect(() => {
     if (fen === "start") {
       const newGame = new Chess();
@@ -50,7 +49,6 @@ export default function Board({
     }
   }, [fen, onFenChange]);
 
-  // Run updateResult whenever the game state changes
   useEffect(() => {
     updateResult(game);
   }, [game, updateResult]);
@@ -75,7 +73,6 @@ export default function Board({
       const newGame = new Chess(game.fen());
       setGame(newGame);
       onFenChange(newGame.fen());
-      // No need to call updateResult here explicitly, it's handled by useEffect on game change
       return true;
     },
     [game, onFenChange, started]
@@ -193,9 +190,9 @@ export default function Board({
     }
   };
 
-  const onSquareClick = ({ square }: SquareHandlerArgs) => {
-    if (started) return;
-
+const onSquareClick = ({ square }: SquareHandlerArgs) => {
+    if(square == null) return;
+  if (!started) {
     const position = { ...game.board().reduce<Record<string, { type: string; color: string }>>((acc, row, rankIndex) => {
       row.forEach((square, fileIndex) => {
         if (square) {
@@ -238,7 +235,23 @@ export default function Board({
     newGame.load(newFen);
     setGame(newGame);
     onFenChange(newFen);
-  };
+    return;
+  }
+
+  if (selectedSquare === null) {
+    if (game.get(square)) {
+      setSelectedSquare(square);
+    }
+  } else {
+    const move = game.move({ from: selectedSquare, to: square, promotion: "q" });
+    if (move !== null) {
+      const newGame = new Chess(game.fen());
+      setGame(newGame);
+      onFenChange(newGame.fen());
+    }
+    setSelectedSquare(null);
+  }
+};
 
   return (
     <div className="flex flex-col items-center">
