@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 
 import { useBoardSize } from "@/hooks/useBoardSize";
+import { SelectLabel } from "@radix-ui/react-select";
 
 export default function Home() {
   const [fen, setFen] = useState("start");
@@ -65,9 +66,10 @@ export default function Home() {
             />
           </div>
 
+          <div className="flex flex-row gap-10">
           <div className="flex flex-col gap-2">
             <Label htmlFor="orientation" className="font-medium text-sm">
-              Board Orientation
+              Orientation
             </Label>
             <Select
               value={orientation}
@@ -80,6 +82,29 @@ export default function Home() {
                 <SelectItem value="b">Black</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="turn" className="font-medium text-sm">
+              Turn
+            </Label>
+            <Select
+              value={fen.split(" ")[1]}
+              onValueChange={(val: "w" | "b") => {
+                const parts = fen.split(" ");
+                if (parts.length >= 2) {
+                  parts[1] = val;
+                  setFen(parts.join(" "));
+                }
+              }}
+              disabled={started}
+            >
+              <SelectTrigger aria-label="Select Turn" className="text-sm" />
+              <SelectContent>
+                <SelectItem value="w">White</SelectItem>
+                <SelectItem value="b">Black</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           </div>
         </CardContent>
       </Card>
