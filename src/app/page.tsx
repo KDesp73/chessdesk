@@ -16,7 +16,6 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 
 export default function Home() {
@@ -24,10 +23,7 @@ export default function Home() {
   const [orientation, setOrientation] = useState<"w" | "b">("w");
   const [started, setStarted] = useState(false);
 
-  const handleStart = () => {
-    setStarted(true);
-  };
-
+  const handleStart = () => setStarted(true);
   const handleNewGame = () => {
     setFen("start");
     setOrientation("w");
@@ -35,42 +31,47 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-screen bg-muted p-4 gap-6">
-      {/* Menu */}
-      <Card className="w-[30%] h-fit">
+    <div className="flex flex-col md:flex-row h-screen bg-muted p-6 md:p-10 gap-8">
+      {/* Sidebar Controls */}
+      <Card className="w-full md:w-[30%] flex-shrink-0 shadow-lg">
         <CardHeader>
-          <CardTitle>Game Controls</CardTitle>
+          <CardTitle className="text-xl">Game Controls</CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <Button onClick={handleNewGame}>New Game</Button>
+        <CardContent className="flex flex-col gap-6">
+          <Button onClick={handleNewGame} className="w-full" size="lg">
+            New Game
+          </Button>
 
           {!started && (
-            <Button onClick={handleStart} variant="secondary">
+            <Button onClick={handleStart} variant="secondary" className="w-full" size="lg">
               Start
             </Button>
           )}
 
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="fen">FEN</Label>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="fen" className="font-medium text-sm">
+              FEN
+            </Label>
             <Input
               id="fen"
               value={fen}
               onChange={(e) => setFen(e.target.value)}
-              placeholder="Enter FEN"
+              placeholder="Enter FEN string"
               disabled={started}
+              className="text-sm font-mono"
             />
           </div>
 
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="orientation">Orientation</Label>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="orientation" className="font-medium text-sm">
+              Board Orientation
+            </Label>
             <Select
               value={orientation}
               onValueChange={(val: "w" | "b") => setOrientation(val)}
               disabled={started}
             >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
+              <SelectTrigger aria-label="Select Board Orientation" className="text-sm" />
               <SelectContent>
                 <SelectItem value="w">White</SelectItem>
                 <SelectItem value="b">Black</SelectItem>
@@ -81,9 +82,14 @@ export default function Home() {
       </Card>
 
       {/* Board */}
-      <div className="flex-1 flex items-center justify-center">
-        <Board fen={fen} orientation={orientation} started={started} onFenChange={setFen} />
-      </div>
+      <main className="flex-1 flex items-center justify-center p-4 md:p-8 bg-white rounded-lg shadow-lg">
+        <Board
+          fen={fen}
+          orientation={orientation}
+          started={started}
+          onFenChange={setFen}
+        />
+      </main>
     </div>
   );
 }
