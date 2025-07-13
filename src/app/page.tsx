@@ -18,10 +18,13 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 
+import { useBoardSize } from "@/hooks/useBoardSize";
+
 export default function Home() {
   const [fen, setFen] = useState("start");
   const [orientation, setOrientation] = useState<"w" | "b">("w");
   const [started, setStarted] = useState(false);
+  const boardSize = useBoardSize();
 
   const handleStart = () => setStarted(true);
   const handleNewGame = () => {
@@ -85,9 +88,10 @@ export default function Home() {
       <main className="flex-1 flex items-center justify-center p-4 md:p-8 bg-white rounded-lg shadow-lg">
         <Board
           fen={fen}
+          size={boardSize}
           orientation={orientation}
           started={started}
-          onFenChange={setFen}
+          onFenChangeAction={setFen}
         />
       </main>
     </div>

@@ -6,16 +6,18 @@ import { Chess, PieceSymbol, Square } from "chess.js";
 
 interface BoardProps {
     fen: string;
+    size: number;
     orientation: "w" | "b";
     started: boolean;
-    onFenChange: (fen: string) => void;
+    onFenChangeAction: (fen: string) => void;
 }
 
 export default function Board({
     fen,
+    size,
     orientation,
     started,
-    onFenChange,
+    onFenChangeAction,
 }: BoardProps) {
     const [game, setGame] = useState(new Chess());
     const [result, setResult] = useState<string | null>(null);
@@ -41,13 +43,13 @@ export default function Board({
         if (fen === "start") {
             const newGame = new Chess();
             setGame(newGame);
-            onFenChange(newGame.fen());
+            onFenChangeAction(newGame.fen());
         } else {
             const newGame = new Chess();
             newGame.load(fen);
             setGame(newGame);
         }
-    }, [fen, onFenChange]);
+    }, [fen, onFenChangeAction]);
 
     useEffect(() => {
         updateResult(game);
@@ -72,10 +74,10 @@ export default function Board({
 
             const newGame = new Chess(game.fen());
             setGame(newGame);
-            onFenChange(newGame.fen());
+            onFenChangeAction(newGame.fen());
             return true;
         },
-        [game, onFenChange, started]
+        [game, onFenChangeAction, started]
     );
 
     const onPieceDropFree = useCallback(
@@ -124,11 +126,11 @@ export default function Board({
             const newGame = new Chess();
             newGame.load(newFen);
             setGame(newGame);
-            onFenChange(newFen);
+            onFenChangeAction(newFen);
 
             return true;
         },
-        [game, onFenChange, started]
+        [game, onFenChangeAction, started]
     );
 
     const palette = [
@@ -183,7 +185,7 @@ export default function Board({
                     const newGame = new Chess();
                     newGame.load(newFen);
                     setGame(newGame);
-                    onFenChange(newFen);
+                    onFenChangeAction(newFen);
                     return;
                 }
             }
@@ -234,7 +236,7 @@ export default function Board({
             const newGame = new Chess();
             newGame.load(newFen);
             setGame(newGame);
-            onFenChange(newFen);
+            onFenChangeAction(newFen);
             return;
         }
 
@@ -247,7 +249,7 @@ export default function Board({
             if (move !== null) {
                 const newGame = new Chess(game.fen());
                 setGame(newGame);
-                onFenChange(newGame.fen());
+                onFenChangeAction(newGame.fen());
             }
             setSelectedSquare(null);
         }
@@ -264,7 +266,7 @@ export default function Board({
           allowDrawingArrows: true,
           showNotation: true,
           boardStyle: {
-            width: 700,
+            width: size,
           },
           boardOrientation: orientation === "w" ? "white" : "black",
           onPieceDrop: started ? onDrop : onPieceDropFree,
