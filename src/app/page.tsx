@@ -110,13 +110,18 @@ export default function Home() {
                   {engine === "stockfish"
                     ? "Stockfish"
                     : engine === "0.3.0"
-                    ? "zig-engine v0.3.0"
+                    ? "v0.3.0"
+                    : engine === "0.2.1"
+                    ? "v0.2.1"
+                    : engine === "0.2.0"
+                    ? "v0.2.0"
                     : engine}
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="stockfish">Stockfish</SelectItem>
-                  <SelectItem value="0.3.0">zig-engine v0.3.0</SelectItem>
-                  {/* Add more engines here if needed */}
+                  <SelectItem value="0.3.0">v0.3.0</SelectItem>
+                  <SelectItem value="0.2.1">v0.2.1</SelectItem>
+                  <SelectItem value="0.2.0">v0.2.0</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -169,7 +174,6 @@ export default function Home() {
         </CardContent>
       </Card>
 
-      {/* Board */}
       <main className="flex-1 flex items-center justify-center p-4 md:p-8 bg-white rounded-lg shadow-lg">
         <Board
           fen={fen}

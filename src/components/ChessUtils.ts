@@ -1,4 +1,4 @@
-import { Chess, PieceSymbol, Square } from "chess.js";
+import { Chess } from "chess.js";
 
 export function pieceUnicode(piece: string): string {
   const map: Record<string, string> = {
