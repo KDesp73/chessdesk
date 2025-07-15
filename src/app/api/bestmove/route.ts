@@ -16,7 +16,7 @@ export async function POST(request: Request) {
   const data: MoveRequest = await request.json();
 
   try {
-    const res = await fetch("http://localhost:8000/bestmove", {
+    const res = await fetch("https://ebcd62bb7e1d.ngrok-free.app/bestmove", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
